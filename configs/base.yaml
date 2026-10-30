@@ -1,0 +1,53 @@
+# Cau hinh goc. Cac file khac (render_*, model_*, ablation/*) chi ghi de nhung truong khac.
+# Gop theo thu tu: base -> render -> model -> ablation (src/config.py::load_config).
+
+paths:
+  split_csv:   data/raw/split_all.csv
+  interim_dir: data/interim
+  renders_dir: data/renders
+  runs_dir:    runs
+  reports_dir: reports
+
+geometry:
+  flat_ratio_threshold: 0.25   # §8.3: chot TRUOC khi thay ket qua train, khong sua sau
+
+data:
+  label_col: label
+  smiles_col: smiles
+  id_col: orig_idx             # mol_idx trong index.parquet == orig_idx trong split_all.csv
+  use_cache: false             # true = doc cache.npy (build bang 02_render.py --cache) thay vi PNG
+  limit_mols: null             # chi dung de chay thu nhanh; null = toan bo
+
+# §12.8 #2: median qua anh o muc phan tu, viet tong quat (n_view=1 -> chinh no).
+# Loss tinh tren tung anh, danh gia tren median qua cac goc nhin.
+train:
+  seeds: [0, 1, 2]             # §5: 3 seed cho thi nghiem, 5 cho ket luan
+  epochs: 40
+  batch_size: 64               # so PHAN TU moi batch (anh moi batch = batch_size * n_view)
+  lr: 3.0e-4
+  weight_decay: 1.0e-4
+  warmup_epochs: 1
+  patience: 8                  # early-stop theo val RMSE muc phan tu, CO TTA (§12.8 #3)
+  amp: true                    # chi co tac dung tren CUDA
+  num_workers: 8
+  grad_clip: 1.0
+
+# KHONG BAO GIO lat guong: lat = doi R <-> S (M2 da giu det=+1). Chi dung phep quay nho + tinh tien.
+augment:
+  rot_deg: 10.0
+  shift_px: 8.0
+
+# §12.8 #3: TTA bat o CA val LAN test, de early-stop do dung dai luong se bao cao.
+tta:
+  enabled: true
+  apply_to: [val, test]
+  transforms:
+    - {rot_deg: 0.0,  dx: 0.0,  dy: 0.0}
+    - {rot_deg: 5.0,  dx: 0.0,  dy: 0.0}
+    - {rot_deg: -5.0, dx: 0.0,  dy: 0.0}
+    - {rot_deg: 0.0,  dx: 4.0,  dy: 0.0}
+    - {rot_deg: 0.0,  dx: -4.0, dy: 0.0}
+
+eval:
+  bootstrap_n: 2000            # bootstrap theo PHAN TU, khong theo anh
+  ci: 0.95

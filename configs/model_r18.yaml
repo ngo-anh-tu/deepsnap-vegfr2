@@ -1,0 +1,6 @@
+# §9.1: bat dau tu ResNet-18; chi tang dung luong neu TRAIN RMSE cao (underfit).
+model:
+  name: r18
+  backbone: resnet18
+  pretrained: true       # ImageNet; scratch.yaml tat di
+  drop_rate: 0.1

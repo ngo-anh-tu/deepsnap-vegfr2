@@ -1,0 +1,7 @@
+# Mot goc duy nhat (roll 0 == PC1-PC2). Dung kem render_v3rect de do 3 goc mua duoc gi
+# (3 goc nhan ba chi phi render + forward).
+render:
+  name: v1rect
+  view_name: V1rect
+  views:
+    - {name: roll000, roll_deg: 0.0}

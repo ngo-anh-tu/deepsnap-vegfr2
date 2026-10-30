@@ -1,0 +1,6 @@
+# §9.1: chi dung khi ResNet-18 UNDERFIT (train RMSE cao). Hien de chay thu, chua phai ket qua chinh.
+model:
+  name: r50
+  backbone: resnet50
+  pretrained: true
+  drop_rate: 0.2

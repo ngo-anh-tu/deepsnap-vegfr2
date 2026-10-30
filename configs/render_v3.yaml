@@ -1,0 +1,19 @@
+# V3: ba mat phang chinh (§8.1). View dau == V1 nen 04_ablate_views.py so duoc truc tiep.
+render:
+  name: v3
+  view_name: V3
+  views:
+    - {name: PC1-PC2, axes: [0, 1]}
+    - {name: PC1-PC3, axes: [0, 2]}
+    - {name: PC2-PC3, axes: [1, 2]}
+  image_px: 256
+  frame_A: 32.0
+  background: white
+  align: true
+  sphere_scale: 0.30
+  stick_radius: 0.12
+  fov: 20.0
+  carbon_color: gray50                # phai khop CARBON trong src/m3_render.py
+  supersample: 4                      # ve o image_px*4 roi LANCZOS ve image_px
+  hydrogens: true                     # false = an H (ablation no_h)
+  shard_size: 1000

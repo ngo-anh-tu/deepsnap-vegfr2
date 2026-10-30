@@ -1,0 +1,23 @@
+# Dung lai moi truong:  conda env create -f environment.yml
+# pymol2 KHONG co tren PyPI (docs §12.0) -> bat buoc di qua conda-forge.
+# Phien ban khop requirements.txt; torch CPU/MPS theo mac dinh conda-forge --
+# tren may CUDA hay cai torch rieng theo pytorch.org roi bo dong `pytorch` o day.
+name: deepsnap-vegfr2
+channels:
+  - conda-forge
+dependencies:
+  - python=3.13
+  - rdkit=2026.9.1
+  # requirements.txt ghi 3.2.0a0 (Linux). conda-forge osx-arm64 hien chi toi 3.1.0; k do bang _calibrate
+  # nen khac phien ban van chay, nhung MANIFEST.json ghi pymol_version thuc te.
+  - pymol-open-source>=3.1
+  - numpy>=2.0
+  - pandas>=2.2
+  - scikit-learn>=1.5
+  - pillow>=10.0
+  - pyarrow>=16.0
+  - pytorch>=2.3
+  - timm>=1.0
+  - tqdm
+  - pyyaml
+  - pytest

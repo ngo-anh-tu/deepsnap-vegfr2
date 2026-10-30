@@ -1,0 +1,12 @@
+# Da kiem chay thuc te trong container Linux/Python 3.13
+rdkit==2026.9.1
+pymol-open-source==3.2.0a0
+numpy>=2.0
+pandas>=2.2
+scikit-learn>=1.5
+pillow>=10.0
+pyarrow>=16.0            # cho .parquet
+torch>=2.3               # cai rieng theo CUDA cua may: pytorch.org
+timm>=1.0                # backbone ImageNet (ResNet-18 / EfficientNet-B0)
+tqdm
+pyyaml

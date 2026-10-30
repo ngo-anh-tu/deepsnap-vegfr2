@@ -1,0 +1,21 @@
+# V3roll: 3 goc XOAY QUANH PC1 (0/60/120 do). PC1 luon nam trong mat phang anh nen khong goc nao
+# bi chieu doc truc dai nhat (khac V3, goc PC2-PC3 co dien tich chieu nho nhat).
+# Goc 0 == V1 nen so truc tiep duoc voi V1 va V3.
+render:
+  name: v3roll
+  view_name: V3roll
+  views:
+    - {name: roll000, roll_deg: 0.0}
+    - {name: roll060, roll_deg: 60.0}
+    - {name: roll120, roll_deg: 120.0}
+  image_px: 256
+  frame_A: 32.0
+  background: white
+  align: true
+  sphere_scale: 0.30
+  stick_radius: 0.12
+  fov: 20.0
+  carbon_color: gray50
+  supersample: 4
+  hydrogens: true
+  shard_size: 1000

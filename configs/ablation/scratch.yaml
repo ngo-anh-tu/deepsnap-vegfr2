@@ -1,0 +1,4 @@
+# Khong dung trong so ImageNet. Dung kem render_v1 + model_r18.
+model:
+  name: r18_scratch
+  pretrained: false

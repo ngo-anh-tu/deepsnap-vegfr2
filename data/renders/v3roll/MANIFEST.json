@@ -1,0 +1,26 @@
+{
+  "git_sha": null,
+  "pymol_version": "3.1.0",
+  "k_measured": 758.1918618537625,
+  "px_per_A_actual": 8.087379859773467,
+  "frame_A": 32.0,
+  "image_px": 256,
+  "supersample": 4,
+  "carbon_color": "gray50",
+  "hydrogens": true,
+  "n_view": 3,
+  "view_name": "V3roll",
+  "views": [
+    "roll000",
+    "roll060",
+    "roll120"
+  ],
+  "align": true,
+  "config_sha256": "a4ab86bf09a21518be248f14d8f5214ebc57ab0c2b48392a8c3a693996ac71f4",
+  "n_molecules": 9306,
+  "n_images": 27918,
+  "n_failed": 0,
+  "n_failed_embed": 0,
+  "n_failed_render": 0,
+  "timestamp": "2026-10-28T10:24:14+07:00"
+}

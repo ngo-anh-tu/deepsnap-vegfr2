@@ -1,0 +1,16 @@
+{
+  "status": "template -- scripts/02_render.py ghi de khi render",
+  "git_sha": null,
+  "pymol_version": null,
+  "k_measured": null,
+  "px_per_A_actual": null,
+  "frame_A": 32.0,
+  "image_px": 256,
+  "n_view": 1,
+  "view_name": "V1",
+  "config_sha256": null,
+  "n_molecules": null,
+  "n_images": null,
+  "n_failed": null,
+  "timestamp": null
+}

@@ -1,0 +1,33 @@
+# V3rect: 3 goc xoay quanh PC1 (nhu V3roll) + khung CHU NHAT co dinh + an H.
+# Khung do tren toan bo 9.306 chat (M2, 3 goc roll, nguyen tu nang, gom xoay augment +-10 do
+# va tinh tien +-1 A): can 32.0 x 21.5 A -> chon 32 x 22.4 A, khong chat nao bi cat.
+# Khung 3:1 KHONG du: cao 12 A cat 5.270 chat. Van la thang TUYET DOI (khong crop theo tung chat).
+render:
+  name: v3rect
+  view_name: V3rect
+  views:
+    - {name: roll000, roll_deg: 0.0}
+    - {name: roll060, roll_deg: 60.0}
+    - {name: roll120, roll_deg: 120.0}
+  image_px: [320, 224]                # [rong, cao] -> 10 px/A ca hai chieu (V1: 8 px/A)
+  frame_A: [32.0, 22.4]
+  background: white
+  align: true
+  sphere_scale: 0.30
+  stick_radius: 0.12
+  fov: 20.0
+  carbon_color: gray50
+  supersample: 4
+  hydrogens: false                    # H ~1/3 so qua cau, gan nhu khong mang tin
+  shard_size: 1000
+
+# Tinh tien tinh bang pixel: 10 px/A nen giu cung bien do theo A nhu base (1 A, TTA 0.5 A).
+augment:
+  shift_px: 10.0
+tta:
+  transforms:
+    - {rot_deg: 0.0,  dx: 0.0,  dy: 0.0}
+    - {rot_deg: 5.0,  dx: 0.0,  dy: 0.0}
+    - {rot_deg: -5.0, dx: 0.0,  dy: 0.0}
+    - {rot_deg: 0.0,  dx: 5.0,  dy: 0.0}
+    - {rot_deg: 0.0,  dx: -5.0, dy: 0.0}

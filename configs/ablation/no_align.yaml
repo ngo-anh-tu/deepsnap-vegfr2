@@ -1,0 +1,4 @@
+# Bo M2: render thang toa do conformer goc (khong can truc chinh). Dung kem render_v1 + model_r18.
+render:
+  name: v1_noalign
+  align: false

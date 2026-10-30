@@ -1,0 +1,13 @@
+# Giam do phan giai, GIU NGUYEN khung 32 A -> 4 px/A (thay vi 8). Dung kem render_v1 + model_r18.
+render:
+  name: v1_res128
+  image_px: 128
+augment:
+  shift_px: 4.0
+tta:
+  transforms:
+    - {rot_deg: 0.0,  dx: 0.0,  dy: 0.0}
+    - {rot_deg: 5.0,  dx: 0.0,  dy: 0.0}
+    - {rot_deg: -5.0, dx: 0.0,  dy: 0.0}
+    - {rot_deg: 0.0,  dx: 2.0,  dy: 0.0}
+    - {rot_deg: 0.0,  dx: -2.0, dy: 0.0}
