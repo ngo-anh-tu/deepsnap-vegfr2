@@ -3,12 +3,15 @@ Baseline 2: ECFP4 (2048 bit) + descriptor RDKit 2D -> gradient boosting, 5 seed 
 Chay tren split_all.csv (KHONG dung so 0,751 / 0,674 cu: khac split, §12.7).
 Can cho bootstrap ghep cap o M8: y_pred muc phan tu cua mot baseline to-po tren DUNG 932 chat test.
 Ra: runs/baseline_ecfp_gbm/{predictions_test.csv, metrics.json}. predictions = trung binh 5 seed.
+Cache features: data/interim/ecfp_features.npz (khoa = hash SMILES+split + NBITS + descriptor + phien ban RDKit;
+lech khoa -> tu tinh lai). --no-cache: bo qua cache. --featurize-only: chi build cache, KHONG cham test.
 """
-import argparse, json, sys
+import argparse, hashlib, json, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import numpy as np, pandas as pd
+import rdkit
 from rdkit import Chem, RDLogger
 from rdkit.Chem import AllChem, Descriptors
 from rdkit.Chem import rdFingerprintGenerator
@@ -34,14 +37,47 @@ def featurize(smiles):
     return np.stack(X)
 
 
+def cache_key(parts, smi):
+    h = hashlib.sha256()
+    for s in ('train', 'val', 'test'):
+        h.update(s.encode()); h.update('\n'.join(parts[s][smi]).encode())
+    h.update(('nbits=%d|radius=2|rdkit=%s|desc=%s' % (NBITS, rdkit.__version__,
+              ','.join(n for n, _ in Descriptors.descList))).encode())
+    return h.hexdigest()
+
+
+def load_or_featurize(parts, smi, path, use_cache=True):
+    key = cache_key(parts, smi)
+    if use_cache and path.exists():
+        z = np.load(path, allow_pickle=False)
+        if str(z['key']) == key:
+            print('features: doc cache %s' % path)
+            return {s: z[s] for s in ('train', 'val', 'test')}
+        print('features: cache lech khoa -> tinh lai')
+    X = {s: featurize(p[smi]) for s, p in parts.items()}
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix('.tmp.npz')
+    np.savez_compressed(tmp, key=np.array(key), **X)
+    tmp.replace(path)
+    print('features: da luu cache %s' % path)
+    return X
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--config', nargs='+', default=['configs/base.yaml'])
-    cfg = load_config(*ap.parse_args().config)
+    ap.add_argument('--no-cache', action='store_true', help='bo qua cache features, tinh lai')
+    ap.add_argument('--featurize-only', action='store_true', help='chi build cache features roi thoat')
+    args = ap.parse_args()
+    cfg = load_config(*args.config)
     df = pd.read_csv(abs_path(cfg['paths']['split_csv']))
     lab, smi = cfg['data']['label_col'], cfg['data']['smiles_col']
     parts = {s: df[df['split'] == s].reset_index(drop=True) for s in ('train', 'val', 'test')}
-    X = {s: featurize(p[smi]) for s, p in parts.items()}
+    cache_path = abs_path(cfg['paths']['interim_dir']) / 'ecfp_features.npz'
+    X = load_or_featurize(parts, smi, cache_path, use_cache=not args.no_cache)
+    if args.featurize_only:
+        print('shape: ' + ', '.join('%s=%s' % (k, v.shape) for k, v in X.items()))
+        return
 
     pv, pt, per_seed = [], [], []
     for sd in SEEDS:

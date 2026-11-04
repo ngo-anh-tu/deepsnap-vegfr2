@@ -1,0 +1,86 @@
+paths:
+  split_csv: data/raw/split_all.csv
+  interim_dir: data/interim
+  renders_dir: data/renders
+  runs_dir: runs
+  reports_dir: reports
+geometry:
+  flat_ratio_threshold: 0.25
+data:
+  label_col: label
+  smiles_col: smiles
+  id_col: orig_idx
+  use_cache: false
+  limit_mols: null
+train:
+  seeds:
+  - 0
+  - 1
+  - 2
+  epochs: 40
+  batch_size: 64
+  lr: 0.0003
+  weight_decay: 0.0001
+  warmup_epochs: 1
+  patience: 8
+  amp: true
+  num_workers: 8
+  grad_clip: 1.0
+augment:
+  rot_deg: 10.0
+  shift_px: 8.0
+tta:
+  enabled: true
+  apply_to:
+  - val
+  - test
+  transforms:
+  - rot_deg: 0.0
+    dx: 0.0
+    dy: 0.0
+  - rot_deg: 5.0
+    dx: 0.0
+    dy: 0.0
+  - rot_deg: -5.0
+    dx: 0.0
+    dy: 0.0
+  - rot_deg: 0.0
+    dx: 4.0
+    dy: 0.0
+  - rot_deg: 0.0
+    dx: -4.0
+    dy: 0.0
+eval:
+  bootstrap_n: 2000
+  ci: 0.95
+render:
+  name: v3_hq
+  view_name: V3
+  views:
+  - name: PC1-PC2
+    axes:
+    - 0
+    - 1
+  - name: PC1-PC3
+    axes:
+    - 0
+    - 2
+  - name: PC2-PC3
+    axes:
+    - 1
+    - 2
+  image_px: 256
+  frame_A: 32.0
+  background: white
+  align: true
+  supersample: 4
+  carbon_color: gray50
+  sphere_scale: 0.3
+  stick_radius: 0.12
+  fov: 20.0
+  shard_size: 1000
+model:
+  name: r18
+  backbone: resnet18
+  pretrained: true
+  drop_rate: 0.1

@@ -10,7 +10,7 @@ import numpy as np, pandas as pd, torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from src.config import render_dir, config_sha256, git_sha
-from src.m4_dataset import RenderDataset
+from src.m4_dataset import RenderDataset, augment_batch
 from src.m5_model import build_model
 from src.m7_eval import predict, regression_metrics
 
@@ -66,7 +66,8 @@ def train_seed(cfg: dict, seed: int, out_dir) -> dict:
     for ep in range(t['epochs']):
         model.train(); t0 = time.time(); run = []
         for x, y, _ in tqdm(dl_tr, desc='seed%d ep%d' % (seed, ep), leave=False):
-            x, y = x.to(dev), y.to(dev)
+            x, y = x.to(dev, non_blocking=True), y.to(dev)
+            x = augment_batch(x, cfg)
             with torch.autocast(device_type=dev.type, enabled=t['amp'] and dev.type == 'cuda'):
                 pred = model(x).float()                                   # [B,V] tung anh
             loss = (((pred - y[:, None]) / model.y_std) ** 2).mean()      # MSE tren nhan chuan hoa

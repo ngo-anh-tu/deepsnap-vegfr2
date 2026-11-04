@@ -1,0 +1,37 @@
+{
+  "git_sha": null,
+  "pymol_version": "3.1.0",
+  "k_measured": 735.4461059970135,
+  "px_per_A_actual": 8.02419720460659,
+  "frame_A": 32.0,
+  "image_px": 256,
+  "n_view": 1,
+  "view_name": "V1",
+  "views": [
+    "PC1-PC2"
+  ],
+  "align": true,
+  "supersample": 4,
+  "carbon_color": "gray40",
+  "sphere_scale": 0.3,
+  "stick_radius": 0.2,
+  "element_colors": {
+    "N": "blue",
+    "O": "red",
+    "S": "yelloworange",
+    "P": "orange",
+    "F": "teal",
+    "Cl": "forest",
+    "Br": "firebrick",
+    "I": "purple",
+    "H": "gray80"
+  },
+  "hide_nonpolar_h": true,
+  "config_sha256": "43be9b930a5fa80ee1d7d5fdf80ec767095dd8a88213a2f3ae92553793f4ebb8",
+  "n_molecules": 9306,
+  "n_images": 9306,
+  "n_failed": 0,
+  "n_failed_embed": 0,
+  "n_failed_render": 0,
+  "timestamp": "2026-10-28T02:24:21+09:00"
+}

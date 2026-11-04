@@ -8,12 +8,9 @@ render:
   frame_A: 32.0                       # khung TUYET DOI (A); chat lon nhat do duoc 31.1 A
   background: white
   align: true                         # chay M2 luc render; false chi cho ablation no_align
-  # Cac tham so duoi PHAI khop hang so trong src/m3_render.py (02_render.py kiem va bao loi).
+  # Ba tham so duoi PHAI khop hang so trong src/m3_render.py (02_render.py kiem va bao loi).
   sphere_scale: 0.30
   stick_radius: 0.12
   fov: 20.0
-  carbon_color: gray50                # phai khop CARBON trong src/m3_render.py
-  supersample: 4                      # ve o image_px*4 roi LANCZOS ve image_px
-  hydrogens: true                     # false = an H (ablation no_h)
   # KHONG co truong `k`: _calibrate tu do va ghi vao MANIFEST.json (k_measured).
   shard_size: 1000                    # png/{mol_idx // shard_size:04d}/

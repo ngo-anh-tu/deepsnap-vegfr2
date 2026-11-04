@@ -6,8 +6,8 @@ from rdkit import Chem
 from src.config import load_config
 from src.m1_conformer import embed
 from src.m2_align import align
-from src.m4_dataset import affine_theta, tta_thetas, sample_train_theta
-from src.views import view_rotation
+from src.m4_dataset import affine_theta, tta_thetas, sample_train_theta, augment_batch
+from src.views import view_rotation, view_matrix
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -21,6 +21,13 @@ def test_every_view_is_a_proper_rotation():
         assert abs(np.linalg.det(view_rotation((i, j))) - 1.0) < 1e-9
 
 
+def test_configured_views_incl_tilt_are_proper_rotations():
+    for f in sorted(glob.glob(os.path.join(ROOT, 'configs', 'render_*.yaml'))):
+        r = (load_config(f) or {}).get('render')
+        for v in (r or {}).get('views', []):
+            assert abs(np.linalg.det(view_matrix(v)) - 1.0) < 1e-9, (f, v['name'])
+
+
 def test_tta_transforms_are_not_reflections():
     for th in tta_thetas(_cfg()):
         assert float(torch.det(th[:, :2])) > 0.99
@@ -31,6 +38,15 @@ def test_train_augment_is_not_reflection():
     for _ in range(500):
         assert float(torch.det(sample_train_theta(cfg)[:, :2])) > 0.99
     assert float(torch.det(affine_theta(0, 0, 0, 256)[:, :2])) == pytest.approx(1.0)
+
+
+def test_augment_batch_same_transform_across_views():
+    cfg = _cfg(); torch.manual_seed(0)
+    x = torch.ones(4, 1, 3, 32, 32); x[..., 12:20, 8:24] = 0.0       # vat the den tren nen trang
+    y = augment_batch(x.expand(4, 3, 3, 32, 32).contiguous(), cfg)
+    assert y.shape == (4, 3, 3, 32, 32)
+    assert torch.allclose(y[:, 0], y[:, 1]) and torch.allclose(y[:, 0], y[:, 2])   # cung phep moi view
+    assert not torch.allclose(y[0, 0], y[1, 0])                                     # khac phep giua phan tu
 
 
 def test_no_flip_ops_in_source():

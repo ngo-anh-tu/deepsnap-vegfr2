@@ -37,8 +37,8 @@ def px_extent(f):
     nz = np.argwhere(a < 250)
     return float(max(np.ptp(nz[:,0]), np.ptp(nz[:,1])) + 1) if len(nz) else 0.0
 
-def main():
-    tmp = tempfile.mkdtemp(); R = Renderer()
+def main(**renderer_kw):
+    tmp = tempfile.mkdtemp(); R = Renderer(**renderer_kw)
     print('hieu chuan: k=%.1f  camera_z=%.2f  px/A muc tieu=%.3f  do lai=%.3f'
           % (R.calib['k'], R.calib['z'], R.calib['px_per_a_target'], R.calib['px_per_a_measured']))
     res = {}
@@ -73,3 +73,10 @@ def test_scale_absolute():
     import pytest
     pytest.importorskip('pymol2')
     assert main() == 0
+
+
+def test_scale_absolute_supersample():
+    """render_v1_hq: ve 1024 roi thu ve 256 -- thang tren anh CUOI van phai la 8 px/A."""
+    import pytest
+    pytest.importorskip('pymol2')
+    assert main(supersample=4, carbon_color='gray50') == 0

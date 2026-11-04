@@ -1,0 +1,22 @@
+# V1_hq2: giu nguyen v1_hq (256 px, 8 px/A, supersample 4) + 3 sua hien thi:
+#   hide_nonpolar_h: an H gan C (chiem ~nua so nguyen tu, khong mang thong tin lien ket H); giu N-H, O-H.
+#   stick_radius 0.12 -> 0.20: que noi ~3 px thay vi ~2 px, lien ket doi (valence) bot bi nhoe.
+#   element_colors: mau di bien, tuong phan voi nen trang (F palecyan mac dinh gan nhu bien mat).
+# So voi v1_hq_r18 -> tac dung cua hien thi. So voi v1_hq2_512 -> tac dung cua do phan giai.
+render:
+  name: v1_hq2
+  view_name: V1
+  views:
+    - {name: PC1-PC2, axes: [0, 1]}
+  image_px: 256
+  frame_A: 32.0
+  background: white
+  align: true
+  supersample: 4
+  carbon_color: gray40
+  element_colors: {N: blue, O: red, S: yelloworange, P: orange, F: teal, Cl: forest, Br: firebrick, I: purple, H: gray80}
+  hide_nonpolar_h: true
+  sphere_scale: 0.30
+  stick_radius: 0.20
+  fov: 20.0
+  shard_size: 1000

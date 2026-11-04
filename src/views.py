@@ -2,7 +2,8 @@
 Goc nhin = phep quay (det=+1) cua he truc da can chinh (M2), KHONG phai phan chieu.
 View axes=[i, j]: truc camera x = truc i, y = truc j, nhin doc theo i x j.
   [0,1] -> PC1-PC2 (V1)   [0,2] -> PC1-PC3   [1,2] -> PC2-PC3
-View roll_deg=t: truc x = PC1 (giu nguyen do dai), y = cos t PC2 + sin t PC3; t=0 trung PC1-PC2.
+tilt (tuy chon): [[truc_camera, do], ...] quay them quanh truc x/y CUA CAMERA, ap theo thu tu.
+  axes [0,1] + tilt [[x, 45]] -> nhin doc (PC2+PC3)/sqrt2 ; [[y, 45]] -> (PC3-PC1)/sqrt2  (V9)
 """
 import numpy as np
 from rdkit import Chem
@@ -17,16 +18,22 @@ def view_rotation(axes) -> np.ndarray:
     return R
 
 
-def roll_rotation(deg: float) -> np.ndarray:
-    t = np.deg2rad(deg); c, s = np.cos(t), np.sin(t)
-    R = np.array([[1, 0, 0], [0, c, s], [0, -s, c]])
+def camera_rotation(axis: str, deg: float) -> np.ndarray:
+    t = np.radians(deg); c, s = np.cos(t), np.sin(t)
+    if axis == 'x':
+        return np.array([[1, 0, 0], [0, c, -s], [0, s, c]])
+    if axis == 'y':
+        return np.array([[c, 0, s], [0, 1, 0], [-s, 0, c]])
+    raise ValueError('tilt chi quanh truc camera x hoac y, nhan %r' % axis)
+
+
+def view_matrix(view: dict) -> np.ndarray:
+    """view: mot muc cua render.views ({name, axes, tilt?}). Tilt quay trong he camera: R = T @ R_axes."""
+    R = view_rotation(view['axes'])
+    for axis, deg in view.get('tilt', []):
+        R = camera_rotation(axis, deg) @ R
     assert abs(np.linalg.det(R) - 1.0) < 1e-9, 'goc nhin phai la phep quay'
     return R
-
-
-def view_matrix(v: dict) -> np.ndarray:
-    """v tu config: {axes: [i, j]} hoac {roll_deg: t}."""
-    return roll_rotation(v['roll_deg']) if 'roll_deg' in v else view_rotation(v['axes'])
 
 
 def rotate_mol(mol: Chem.Mol, R: np.ndarray) -> Chem.Mol:

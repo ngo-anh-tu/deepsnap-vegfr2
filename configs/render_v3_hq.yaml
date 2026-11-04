@@ -1,0 +1,20 @@
+# V3_hq: 3 mat phang chinh (nhu render_v3) + hien thi cua v1_hq (cau hinh tot nhat tren val):
+#   256 px, khung 32 A -> 8 px/A, supersample 4, carbon gray50, mau nguyen to mac dinh, hien moi H.
+# View dau == v1_hq nen so truc tiep voi v1_hq_r18 tren VAL (chi khac so goc nhin).
+render:
+  name: v3_hq
+  view_name: V3
+  views:
+    - {name: PC1-PC2, axes: [0, 1]}
+    - {name: PC1-PC3, axes: [0, 2]}
+    - {name: PC2-PC3, axes: [1, 2]}
+  image_px: 256
+  frame_A: 32.0
+  background: white
+  align: true
+  supersample: 4
+  carbon_color: gray50
+  sphere_scale: 0.30
+  stick_radius: 0.12
+  fov: 20.0
+  shard_size: 1000

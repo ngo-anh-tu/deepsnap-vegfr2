@@ -39,10 +39,9 @@ def main():
         sheet = Image.new('RGB', (COLS * THUMB, rows * THUMB), 'white')
         dr = ImageDraw.Draw(sheet)
         for k, (_, r) in enumerate(chunk.iterrows()):
-            im = Image.open(d / r['png_path']).convert('RGB')
-            im.thumbnail((THUMB, THUMB), Image.LANCZOS)          # giu ti le khung (co the khong vuong)
+            im = Image.open(d / r['png_path']).convert('RGB').resize((THUMB, THUMB), Image.LANCZOS)
             x, y = (k % COLS) * THUMB, (k // COLS) * THUMB
-            sheet.paste(im, (x + (THUMB - im.width) // 2, y + (THUMB - im.height) // 2))
+            sheet.paste(im, (x, y))
             dr.rectangle([x, y, x + THUMB - 1, y + THUMB - 1], outline=(210, 210, 210))
             dr.text((x + 3, y + 2), '%d  %.2f' % (r['mol_idx'], r['label']), fill=(0, 0, 0))
         sheet.save(d / 'qa' / ('contact_sheet_%03d.jpg' % s), quality=85)

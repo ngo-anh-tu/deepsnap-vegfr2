@@ -20,6 +20,20 @@ def regression_metrics(y, p) -> dict:
                 pearson=float(stats.pearsonr(y, p)[0]), spearman=float(stats.spearmanr(y, p)[0]))
 
 
+def classification_metrics(y, p, thr: float) -> dict:
+    """Nhi phan hoa pIC50 >= thr (active). AUC dung thang y_pred lam diem, khong can nguong thu hai.
+    Lop lech (~77% active o thr=6) -> accuracy de danh lua, doc kem balanced_acc / MCC."""
+    from sklearn.metrics import accuracy_score, balanced_accuracy_score, matthews_corrcoef, roc_auc_score
+    y, p = np.asarray(y, float), np.asarray(p, float)
+    yt, yp = y >= thr, p >= thr
+    t = ('%g' % thr).replace('.', '_')
+    return {'acc@%s' % t: float(accuracy_score(yt, yp)),
+            'bal_acc@%s' % t: float(balanced_accuracy_score(yt, yp)),
+            'mcc@%s' % t: float(matthews_corrcoef(yt, yp)),
+            'auc@%s' % t: float(roc_auc_score(yt, p)),
+            'active_frac@%s' % t: float(yt.mean())}
+
+
 @torch.no_grad()
 def predict(model, loader, device, cfg: dict, use_tta: bool, amp: bool = False) -> pd.DataFrame:
     """Tra ve DataFrame [mol_idx, y_true, y_pred] muc phan tu.

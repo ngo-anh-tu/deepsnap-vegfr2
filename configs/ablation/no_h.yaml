@@ -1,5 +1,0 @@
-# An hydro (khoang 1/3 so qua cau ve ra). Hieu chuan benzene cung bo H nen thang van dung 8 px/A.
-# Dung kem render_v1 (hoac render_v3roll) + model_r18.
-render:
-  name: v1_noh
-  hydrogens: false

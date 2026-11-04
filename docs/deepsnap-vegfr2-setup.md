@@ -89,9 +89,9 @@ Dung lượng PNG đầy đủ: **V1 ≈ 370 MB · V3 ≈ 1,1 GB · V27 ≈ 10 G
 | | `requirements.txt` | ✅ đã có |
 | | **`environment.yml`** | **cần viết — pymol không cài bằng pip (§12.0)** |
 | `configs/` | `base.yaml` · `render_v1.yaml` · `model_r18.yaml` | cần viết — **3 file này trước** |
-| | `render_v3.yaml` · `render_v3roll.yaml` · `render_v3rect.yaml` · `render_v27.yaml` · `model_effb0.yaml` | sau bước 1 |
-| | `model_r50.yaml` | chạy thử — §9.1: chỉ dùng cho kết quả nếu R18 underfit |
-| `configs/ablation/` | `res_128.yaml` · `one_view.yaml` · `no_h.yaml` · `scratch.yaml` · `no_align.yaml` | sau bước 1 |
+| | `render_v3.yaml` · `render_v27.yaml` · `model_effb0.yaml` | sau bước 1 |
+| | ~~`model_r50.yaml`~~ | **bỏ** — §9.1: chỉ dựng nếu underfit |
+| `configs/ablation/` | `res_128.yaml` · `scratch.yaml` · `no_align.yaml` | sau bước 1 |
 | `data/raw/` | `VEGFR2_dataset_raw.xlsx` · `split_all.csv` | chép vào |
 | | `kinase_chembl/` | rỗng, cho §8.4 ★ |
 | `data/interim/` | `conformers.sdf` · `conformers_meta.parquet` | ⚙ sinh |

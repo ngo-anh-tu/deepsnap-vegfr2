@@ -29,11 +29,6 @@ def load_config(*paths) -> dict:
     return cfg
 
 
-def wh(v) -> tuple:
-    """image_px / frame_A trong config: so (khung vuong) hoac [rong, cao]."""
-    return (v, v) if isinstance(v, (int, float)) else (v[0], v[1])
-
-
 def abs_path(rel) -> Path:
     p = Path(rel)
     return p if p.is_absolute() else ROOT / p

@@ -1,0 +1,27 @@
+{
+  "git_sha": null,
+  "pymol_version": "3.1.0",
+  "k_measured": 394.2597681633474,
+  "px_per_A_actual": 4.043689929880487,
+  "frame_A": 32.0,
+  "image_px": 128,
+  "n_view": 1,
+  "view_name": "V1",
+  "views": [
+    "PC1-PC2"
+  ],
+  "align": true,
+  "supersample": 1,
+  "carbon_color": null,
+  "sphere_scale": 0.3,
+  "stick_radius": 0.12,
+  "element_colors": null,
+  "hide_nonpolar_h": false,
+  "config_sha256": "bd2eab2af3f2ff1ccc2d6b9f9b0b42155d978d5727e0b8db3aadded06b885b86",
+  "n_molecules": 9306,
+  "n_images": 9306,
+  "n_failed": 0,
+  "n_failed_embed": 0,
+  "n_failed_render": 0,
+  "timestamp": "2026-10-28T14:12:04+09:00"
+}

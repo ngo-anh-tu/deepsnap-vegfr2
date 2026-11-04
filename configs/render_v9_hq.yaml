@@ -1,0 +1,27 @@
+# V9_hq: 9 huong nhin = 3 truc chinh (y het render_v3_hq) + 6 duong cheo PC_i +- PC_j.
+# Tilt quay +-45 do quanh truc CAMERA (src/views.py::view_matrix), van la phep quay det=+1.
+# Hien thi giong v3_hq (256 px, 8 px/A, supersample 4, carbon gray50) -> view 0..2 trung anh v3_hq,
+# so voi v3_hq_r18 tren VAL chi khac so goc nhin.
+render:
+  name: v9_hq
+  view_name: V9
+  views:
+    - {name: PC1-PC2, axes: [0, 1]}                        # nhin doc PC3
+    - {name: PC1-PC3, axes: [0, 2]}                        # nhin doc -PC2
+    - {name: PC2-PC3, axes: [1, 2]}                        # nhin doc PC1
+    - {name: PC1-PC2/x+45, axes: [0, 1], tilt: [[x, 45]]}   # (PC2+PC3)
+    - {name: PC1-PC2/x-45, axes: [0, 1], tilt: [[x, -45]]}  # (PC3-PC2)
+    - {name: PC1-PC2/y+45, axes: [0, 1], tilt: [[y, 45]]}   # (PC3-PC1)
+    - {name: PC1-PC2/y-45, axes: [0, 1], tilt: [[y, -45]]}  # (PC1+PC3)
+    - {name: PC1-PC3/y+45, axes: [0, 2], tilt: [[y, 45]]}   # -(PC1+PC2)
+    - {name: PC1-PC3/y-45, axes: [0, 2], tilt: [[y, -45]]}  # (PC1-PC2)
+  image_px: 256
+  frame_A: 32.0
+  background: white
+  align: true
+  supersample: 4
+  carbon_color: gray50
+  sphere_scale: 0.30
+  stick_radius: 0.12
+  fov: 20.0
+  shard_size: 1000

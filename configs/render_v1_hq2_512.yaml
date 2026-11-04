@@ -1,0 +1,28 @@
+# V1_hq2 o 512 px, GIU khung 32 A -> 16 px/A. Ve o 1024 px nhu v1_hq2 (supersample 2) -> chi khac do phan giai.
+# Tham so tinh bang px (augment, TTA) nhan doi de giu nguyen do lon tinh bang A.
+render:
+  name: v1_hq2_512
+  view_name: V1
+  views:
+    - {name: PC1-PC2, axes: [0, 1]}
+  image_px: 512
+  frame_A: 32.0
+  background: white
+  align: true
+  supersample: 2
+  carbon_color: gray40
+  element_colors: {N: blue, O: red, S: yelloworange, P: orange, F: teal, Cl: forest, Br: firebrick, I: purple, H: gray80}
+  hide_nonpolar_h: true
+  sphere_scale: 0.30
+  stick_radius: 0.20
+  fov: 20.0
+  shard_size: 1000
+augment:
+  shift_px: 16.0
+tta:
+  transforms:
+    - {rot_deg: 0.0,  dx: 0.0,  dy: 0.0}
+    - {rot_deg: 5.0,  dx: 0.0,  dy: 0.0}
+    - {rot_deg: -5.0, dx: 0.0,  dy: 0.0}
+    - {rot_deg: 0.0,  dx: 8.0,  dy: 0.0}
+    - {rot_deg: 0.0,  dx: -8.0, dy: 0.0}

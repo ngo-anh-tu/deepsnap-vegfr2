@@ -1,0 +1,15 @@
+{
+  "seed": 1,
+  "git_sha": null,
+  "config_sha256": "5f4cbba4cd0f5f5a45988c7ada7b46c8fd7a632f02bd94eb56ceb5ff1db0d75a",
+  "split": "val",
+  "n_molecules": 930,
+  "n_images": 930,
+  "best_epoch": 23,
+  "train_rmse": 0.39466188627987014,
+  "rmse": 0.9576171059056768,
+  "mae": 0.7468618687763009,
+  "r2": 0.24113489158254742,
+  "pearson": 0.5378052499841046,
+  "spearman": 0.5346420822236478
+}

@@ -1,0 +1,20 @@
+# V1 nang chat luong: giong het render_v1 (1 goc PC1-PC2, 256 px, khung 32 A -> 8 px/A) + 2 sua:
+#   supersample: ve o 1024 px roi thu ve 256 (LANCZOS) -> canh muot, que noi hien ro. Thang KHONG doi.
+#   carbon_color: to C mot mau co dinh. render_v1 de PyMOL auto_color -> mau C doi theo thu tu nap
+#                 (chu ky 8 mau theo mol_idx), la nhieu khong mang thong tin hoa hoc.
+# Dung kem base + model_r18 -> run v1_hq_r18; so sanh voi v1_r18 tren VAL (test chi cham 1 lan).
+render:
+  name: v1_hq
+  view_name: V1
+  views:
+    - {name: PC1-PC2, axes: [0, 1]}
+  image_px: 256
+  frame_A: 32.0
+  background: white
+  align: true
+  supersample: 4
+  carbon_color: gray50
+  sphere_scale: 0.30
+  stick_radius: 0.12
+  fov: 20.0
+  shard_size: 1000

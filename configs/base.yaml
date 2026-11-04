@@ -29,7 +29,7 @@ train:
   warmup_epochs: 1
   patience: 8                  # early-stop theo val RMSE muc phan tu, CO TTA (§12.8 #3)
   amp: true                    # chi co tac dung tren CUDA
-  num_workers: 8
+  num_workers: 12
   grad_clip: 1.0
 
 # KHONG BAO GIO lat guong: lat = doi R <-> S (M2 da giu det=+1). Chi dung phep quay nho + tinh tien.

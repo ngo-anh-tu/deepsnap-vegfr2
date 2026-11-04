@@ -1,16 +1,21 @@
 {
-  "status": "template -- scripts/02_render.py ghi de khi render",
   "git_sha": null,
-  "pymol_version": null,
-  "k_measured": null,
-  "px_per_A_actual": null,
+  "pymol_version": "3.1.0",
+  "k_measured": 758.1918618525913,
+  "px_per_A_actual": 8.087379859760974,
   "frame_A": 32.0,
   "image_px": 256,
   "n_view": 1,
   "view_name": "V1",
-  "config_sha256": null,
-  "n_molecules": null,
-  "n_images": null,
-  "n_failed": null,
-  "timestamp": null
+  "views": [
+    "PC1-PC2"
+  ],
+  "align": true,
+  "config_sha256": "d8bc657bbd6d43e5869453bb6ed91eff6af745b55714c5c156aa73d651606ddd",
+  "n_molecules": 9306,
+  "n_images": 9306,
+  "n_failed": 0,
+  "n_failed_embed": 0,
+  "n_failed_render": 0,
+  "timestamp": "2026-10-27T18:57:37+09:00"
 }

@@ -14,7 +14,7 @@ import numpy as np, pandas as pd
 from PIL import Image, ImageDraw
 from rdkit import Chem, RDLogger
 from tqdm import tqdm
-from src.config import load_config, abs_path, render_dir, config_sha256, git_sha, wh
+from src.config import load_config, abs_path, render_dir, config_sha256, git_sha
 from src.m1_conformer import embed
 from src.m2_align import align
 from src.views import view_matrix, rotate_mol
@@ -28,13 +28,20 @@ def _png_rel(mol_idx, view_idx, shard):
     return 'png/%04d/mol%06d_v%02d.png' % (mol_idx // shard, mol_idx, view_idx)
 
 
+def make_renderer(r):
+    """supersample / carbon_color / element_colors / hide_nonpolar_h vang mat -> hanh vi cu
+    (render_v1.yaml van ra dung bo anh cu)."""
+    from src.m3_render import Renderer
+    return Renderer(img_px=r['image_px'], frame_a=r['frame_A'], bg=r['background'],
+                    supersample=r.get('supersample', 1), carbon_color=r.get('carbon_color'),
+                    sphere_scale=r['sphere_scale'], stick_radius=r['stick_radius'],
+                    element_colors=r.get('element_colors'), hide_nonpolar_h=r.get('hide_nonpolar_h', False))
+
+
 def _init_worker(cfg):
     global _R, _CFG
-    from src.m3_render import Renderer
     _CFG = cfg
-    r = cfg['render']
-    _R = Renderer(img_px=r['image_px'], frame_a=r['frame_A'], bg=r['background'],
-                  supersample=r['supersample'], show_h=r['hydrogens'])
+    _R = make_renderer(cfg['render'])
 
 
 def prepare(mol, do_align):
@@ -64,20 +71,19 @@ def read_sdf(path):
 
 
 def check_m3_constants(r):
+    """sphere_scale / stick_radius gio duoc truyen vao Renderer; chi bao khi khac mac dinh cua M3
+    (tests/ dung mac dinh, nen ket qua test_frame_fits khong phu bo anh nay)."""
     import src.m3_render as m3
-    for key, have in (('sphere_scale', m3.VDW_SCALE), ('stick_radius', m3.STICK_R),
-                      ('carbon_color', m3.CARBON)):
-        if (r[key] != have) if isinstance(have, str) else (abs(r[key] - have) > 1e-9):
-            raise SystemExit('config render.%s=%s lech voi src/m3_render.py=%s' % (key, r[key], have))
+    for key, have in (('sphere_scale', m3.VDW_SCALE), ('stick_radius', m3.STICK_R)):
+        if abs(r[key] - have) > 1e-9:
+            print('LUU Y: render.%s=%s khac mac dinh src/m3_render.py=%s' % (key, r[key], have))
 
 
 def scale_qa(cfg, out):
     """Anh benzene vs sorafenib canh nhau: phep kiem thang tuyet doi §4 (chong loi cmd.zoom())."""
-    from src.m3_render import Renderer
     r = cfg['render']
     Path(out).parent.mkdir(parents=True, exist_ok=True)
-    R = Renderer(img_px=r['image_px'], frame_a=r['frame_A'], bg=r['background'],
-                 supersample=r['supersample'], show_h=r['hydrogens'])
+    R = make_renderer(r)
     mols = [('benzene', 'c1ccccc1'),
             ('sorafenib', 'CNC(=O)c1cc(Oc2ccc(NC(=O)Nc3ccc(Cl)c(C(F)(F)F)c3)cc2)ccn1')]
     tiles = []
@@ -102,8 +108,8 @@ def scale_qa(cfg, out):
 
 
 def build_cache(out_dir, index, r):
-    n, (w, h) = len(index), wh(r['image_px'])
-    mm = np.lib.format.open_memmap(out_dir / 'cache.npy', mode='w+', dtype=np.uint8, shape=(n, h, w, 3))
+    n, px = len(index), r['image_px']
+    mm = np.lib.format.open_memmap(out_dir / 'cache.npy', mode='w+', dtype=np.uint8, shape=(n, px, px, 3))
     for i, p in enumerate(tqdm(index['png_path'], desc='cache.npy')):
         mm[i] = np.asarray(Image.open(out_dir / p).convert('RGB'))
     mm.flush()
@@ -159,9 +165,7 @@ def main():
 
     scale_qa(cfg, out_dir / 'qa' / 'scale_benzene_vs_sorafenib.png')
     if calib is None:       # khong ve gi moi -> do lai thang de ghi MANIFEST
-        from src.m3_render import Renderer
-        R = Renderer(img_px=r['image_px'], frame_a=r['frame_A'], bg=r['background'],
-                     supersample=r['supersample'], show_h=r['hydrogens']); calib = R.calib; R.close()
+        R = make_renderer(r); calib = R.calib; R.close()
     if a.cache:
         build_cache(out_dir, index, r)
 
@@ -171,9 +175,11 @@ def main():
     manifest = dict(
         git_sha=git_sha(), pymol_version=pv if isinstance(pv, str) else str(pv[0]),
         k_measured=calib['k'], px_per_A_actual=calib['px_per_a_measured'],
-        frame_A=r['frame_A'], image_px=r['image_px'], supersample=r['supersample'],
-        carbon_color=r['carbon_color'], hydrogens=r['hydrogens'], n_view=len(r['views']), view_name=r['view_name'],
+        frame_A=r['frame_A'], image_px=r['image_px'], n_view=len(r['views']), view_name=r['view_name'],
         views=[v['name'] for v in r['views']], align=r['align'],
+        supersample=r.get('supersample', 1), carbon_color=r.get('carbon_color'),
+        sphere_scale=r['sphere_scale'], stick_radius=r['stick_radius'],
+        element_colors=r.get('element_colors'), hide_nonpolar_h=r.get('hide_nonpolar_h', False),
         config_sha256=config_sha256({k: v for k, v in cfg.items() if not k.startswith('_')}),
         n_molecules=int(n_mol), n_images=int(len(index)),
         n_failed=int(len(want) - n_mol), n_failed_embed=int(n_embed_missing), n_failed_render=len(failed),
